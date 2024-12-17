@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using fournisseurIdentite.Services;
+using fournisseurIdentite.src.DTO;
 
 namespace fournisseurIdentite.Controllers;
 
@@ -28,9 +29,3 @@ public class EmailController : ControllerBase
     }
 }
 
-public class EmailRequest
-{
-    public string ToEmail { get; set; }
-    public string Subject { get; set; }
-    public string Body { get; set; }
-}
