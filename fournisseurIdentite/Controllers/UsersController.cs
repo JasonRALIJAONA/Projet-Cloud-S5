@@ -22,6 +22,7 @@ public class UsersController : ControllerBase
         users.Username = user.Username;
         users.Pass = _passwordService.HashPassword(user.Password);
         users.Email = user.Email;
+        
 
 
 
