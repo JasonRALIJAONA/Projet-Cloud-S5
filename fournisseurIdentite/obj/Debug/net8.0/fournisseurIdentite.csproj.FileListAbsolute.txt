@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\bin\Debug\net8.0\appsettings.Development.json
 D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\bin\Debug\net8.0\appsettings.json
 D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\bin\Debug\net8.0\fournisseurIdentite.exe
@@ -32,3 +33,39 @@ D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\obj\Debug\net8.0\re
 D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.pdb
 D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.genruntimeconfig.cache
 D:\JASON\programmes\Mixe\Projet Cloud S5\fournisseurIdentite\obj\Debug\net8.0\ref\fournisseurIdentite.dll
+=======
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\appsettings.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\fournisseurIdentite.exe
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\fournisseurIdentite.deps.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\fournisseurIdentite.runtimeconfig.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\fournisseurIdentite.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\fournisseurIdentite.pdb
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\Microsoft.OpenApi.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.csproj.AssemblyReference.cache
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.AssemblyInfoInputs.cache
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.AssemblyInfo.cs
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.csproj.CoreCompileInputs.cache
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.sourcelink.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets\msbuild.fournisseurIdentite.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets\msbuild.build.fournisseurIdentite.props
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.fournisseurIdentite.props
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.fournisseurIdentite.props
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\staticwebassets.pack.json
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\scopedcss\bundle\fournisseurIdentite.styles.css
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.csproj.CopyComplete
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\refint\fournisseurIdentite.dll
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.pdb
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\fournisseurIdentite.genruntimeconfig.cache
+C:\Users\SERGIANA\Documents\Projet-Cloud-S5\fournisseurIdentite\obj\Debug\net8.0\ref\fournisseurIdentite.dll
+>>>>>>> Stashed changes
