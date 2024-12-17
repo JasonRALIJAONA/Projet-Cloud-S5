@@ -7,3 +7,4 @@ CREATE TABLE users(
     pass varchar(50) not null,
     nb_tentative integer default 0
 );
+
