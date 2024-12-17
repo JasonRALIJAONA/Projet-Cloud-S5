@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\JASON\\programmes\\Mixe\\Projet Cloud S5\\fournisseurIdentite\\fournisseurIdentite.csproj": {}
+    "D:\\GitHub\\Projet-Cloud-S5\\fournisseurIdentite\\fournisseurIdentite.csproj": {}
   },
   "projects": {
-    "D:\\JASON\\programmes\\Mixe\\Projet Cloud S5\\fournisseurIdentite\\fournisseurIdentite.csproj": {
+    "D:\\GitHub\\Projet-Cloud-S5\\fournisseurIdentite\\fournisseurIdentite.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\JASON\\programmes\\Mixe\\Projet Cloud S5\\fournisseurIdentite\\fournisseurIdentite.csproj",
+        "projectUniqueName": "D:\\GitHub\\Projet-Cloud-S5\\fournisseurIdentite\\fournisseurIdentite.csproj",
         "projectName": "fournisseurIdentite",
-        "projectPath": "D:\\JASON\\programmes\\Mixe\\Projet Cloud S5\\fournisseurIdentite\\fournisseurIdentite.csproj",
-        "packagesPath": "C:\\Users\\RALIJAONA\\.nuget\\packages\\",
-        "outputPath": "D:\\JASON\\programmes\\Mixe\\Projet Cloud S5\\fournisseurIdentite\\obj\\",
+        "projectPath": "D:\\GitHub\\Projet-Cloud-S5\\fournisseurIdentite\\fournisseurIdentite.csproj",
+        "packagesPath": "C:\\Users\\Nekena\\.nuget\\packages\\",
+        "outputPath": "D:\\GitHub\\Projet-Cloud-S5\\fournisseurIdentite\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\RALIJAONA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Nekena\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
