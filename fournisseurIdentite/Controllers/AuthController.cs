@@ -8,10 +8,10 @@ namespace fournisseurIdentite.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly PasswordService _passwordService;
+        private readonly IPasswordService _passwordService;
 
         // Injection du service via le constructeur
-        public AuthController(PasswordService passwordService)
+        public AuthController(IPasswordService passwordService)
         {
             _passwordService = passwordService;
         }

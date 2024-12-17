@@ -3,13 +3,13 @@ using System.Security.Cryptography;
 
 namespace fournisseurIdentite.Services
 {
-    public interface PasswordService
+    public interface IPasswordService
     {
         string HashPassword(string password);
         bool VerifyPassword(string password, string storedHash);
     }
 
-    public class PasswordService : PasswordService
+    public class PasswordService : IPasswordService
     {
         public string HashPassword(string password)
         {
