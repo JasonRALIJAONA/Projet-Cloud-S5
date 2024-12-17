@@ -1,8 +1,7 @@
-namespace fournisseurIdentite.Services
+namespace fournisseurIdentite.Services;
+
+public interface IPasswordService
 {
-    public interface IPasswordService
-    {
-        string HashPassword(string password);
-        bool VerifyPassword(string password, string storedHash);
-    }
+    string HashPassword(string password);
+    bool VerifyPassword(string password, string storedHash);
 }
