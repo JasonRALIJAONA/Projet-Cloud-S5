@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "gjg7J2IW5zd7h97B8fmLQUbLxVGon0CgsAE1xwHkipc=",
+  "Source": "fournisseurIdentite",
+  "BasePath": "_content/fournisseurIdentite",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
