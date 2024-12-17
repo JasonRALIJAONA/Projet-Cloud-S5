@@ -1,5 +1,13 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+builder.Services.AddScoped<EmailService>(provider => new EmailService(
+    "smtp.gmail.com", // SMTP server
+    587,                // SMTP port
+    "jasonralijaona@gmail.com", // SMTP user
+    "ngddkrpplobkmkzj"     // SMTP password
+));
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -15,6 +23,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 var summaries = new[]
 {
