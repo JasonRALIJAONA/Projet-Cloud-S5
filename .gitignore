@@ -32,3 +32,4 @@ bld/
 *.dll
 *.json
 *.cache
+.fake
