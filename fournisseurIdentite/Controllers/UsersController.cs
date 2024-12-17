@@ -9,11 +9,21 @@ namespace fournisseurIdentite.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
+     private readonly IPasswordService _passwordService;
+    public UsersController(IPasswordService passwordService)
+    {
+        _passwordService = passwordService;
+    }
     private readonly Users _users;
 
     [HttpPost("inscription")]
-    public async Task<IActionResult> Post([FromBody] UsersRequest user){
-       
+    public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
+        Users users= new Users();
+        users.Username = user.Username;
+        users.Pass = _passwordService.HashPassword(user.Password);
+        users.Email = user.Email;
+
+
 
     }
 }
