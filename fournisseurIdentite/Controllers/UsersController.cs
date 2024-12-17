@@ -11,8 +11,10 @@ namespace fournisseurIdentite.Controllers;
 public class UsersController : ControllerBase
 {
      private readonly IPasswordService _passwordService;
-    public UsersController(IPasswordService passwordService)
+     private readonly EmailService _emailService;
+    public UsersController(IPasswordService passwordService, EmailService emailService) 
     {
+        _emailService = emailService;
         _passwordService = passwordService;
     }
     private readonly User? _users;

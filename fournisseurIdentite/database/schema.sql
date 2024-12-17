@@ -5,5 +5,6 @@ CREATE TABLE Users(
     username varchar(50) unique,
     email varchar(50) unique,
     pass varchar(50) not null,
-    nb_tentative int default 0
+    est_valide boolean default false,
+    nb_tentative integer default 0
 );
