@@ -4,10 +4,10 @@ namespace fournisseurIdentite.src.DTO
 {
     public class Users
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Pass { get; set; }
+        public int ?Id { get; set; }
+        public string ?Username { get; set; }
+        public string ?Email { get; set; }
+        public string ?Pass { get; set; }
 
         public static Users CreateInstance(int id, string username, string email, string rawPassword, IPasswordService passwordService)
         {
