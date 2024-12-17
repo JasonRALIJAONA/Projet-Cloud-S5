@@ -1,4 +1,4 @@
-using fournisseurIdentite.Services.email;
+using fournisseurIdentite.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
