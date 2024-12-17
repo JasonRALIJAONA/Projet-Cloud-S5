@@ -1,3 +1,5 @@
+using fournisseurIdentite.Services.email;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
