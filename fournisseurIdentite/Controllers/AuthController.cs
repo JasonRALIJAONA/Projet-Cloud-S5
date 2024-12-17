@@ -22,7 +22,7 @@ namespace fournisseurIdentite.Controllers
 
                 var hashedPassword = PasswordUtils.HashPassword(password);
                 Console.WriteLine(hashedPassword);
-                return Ok(new { hashedPassword });
+                return Ok(hashedPassword);
             }
             catch (Exception ex)
             {
