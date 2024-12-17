@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using fournisseurIdentite.Services;
 using fournisseurIdentite.src.DTO;
-
+using fournisseurIdentite.src.Utils;
 namespace fournisseurIdentite.Controllers;
 
 [ApiController]
@@ -10,8 +10,10 @@ namespace fournisseurIdentite.Controllers;
 public class UsersController : ControllerBase
 {
      private readonly IPasswordService _passwordService;
-    public UsersController(IPasswordService passwordService)
+     private readonly EmailService _emailService;
+    public UsersController(IPasswordService passwordService, EmailService emailService) 
     {
+        _emailService = emailService;
         _passwordService = passwordService;
     }
     private readonly Users _users;
@@ -23,8 +25,9 @@ public class UsersController : ControllerBase
         users.Pass = _passwordService.HashPassword(user.Password);
         users.Email = user.Email;
         
+        // TO DO : save to database 
 
-
-
+        await _emailService.SendEmailAsync(users.Email, "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username));
+        return Ok("Compte créé");
     }
 }
