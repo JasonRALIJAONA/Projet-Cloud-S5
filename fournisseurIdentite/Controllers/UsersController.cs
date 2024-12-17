@@ -9,5 +9,11 @@ namespace fournisseurIdentite.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    
+    private readonly Users _users;
+
+    [HttpPost("inscription")]
+    public async Task<IActionResult> Post([FromBody] UsersRequest user){
+       
+
+    }
 }
