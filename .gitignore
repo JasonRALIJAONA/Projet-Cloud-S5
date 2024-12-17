@@ -1,3 +1,4 @@
+# .NET
 bin/
 obj/
 *.user
@@ -5,6 +6,8 @@ obj/
 *.suo
 *.userosscache
 *.sln.docstates
+
+# NuGet
 *.nupkg
 *.snupkg
 packages/
@@ -12,6 +15,8 @@ packages/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+
+# Build results
 [Dd]ebug/
 [Rr]elease/
 x64/
@@ -23,7 +28,6 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-*.dll
-*.json
-*.cache
-.fake
+fournisseurIdentite/bin/Debug/net8.0/fournisseurIdentite.dll
+fournisseurIdentite/bin/Debug/net8.0/fournisseurIdentite.dll
+fournisseurIdentite/bin/Debug/net8.0/fournisseurIdentite.exe

@@ -15,9 +15,6 @@ builder.Services.AddScoped<EmailService>(provider => new EmailService(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IPasswordService, PasswordService>();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
