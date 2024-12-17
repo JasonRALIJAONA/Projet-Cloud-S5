@@ -9,6 +9,7 @@ builder.Services.AddScoped<EmailService>(provider => new EmailService(
     "jasonralijaona@gmail.com", // SMTP user
     "ngddkrpplobkmkzj"     // SMTP password
 ));
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
