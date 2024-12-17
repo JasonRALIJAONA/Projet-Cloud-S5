@@ -2,7 +2,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using fournisseurIdentite.Services;
 using fournisseurIdentite.src.DTO;
-using fournisseurIdentite.src.Utils;
+using fournisseurIdentite.Models;
+
 namespace fournisseurIdentite.Controllers;
 
 [ApiController]
@@ -16,7 +17,7 @@ public class UsersController : ControllerBase
         _emailService = emailService;
         _passwordService = passwordService;
     }
-    private readonly Users _users;
+    private readonly User? _users;
 
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
