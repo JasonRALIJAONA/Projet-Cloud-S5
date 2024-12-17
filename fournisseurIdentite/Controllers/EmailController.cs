@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using fournisseurIdentite.Services.email;
+using fournisseurIdentite.Services;
 using fournisseurIdentite.src.DTO;
 
 namespace fournisseurIdentite.Controllers;
