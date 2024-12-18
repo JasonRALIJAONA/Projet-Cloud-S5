@@ -22,6 +22,7 @@ builder.Services.AddDbContext<FournisseurIdentiteContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<UtilisateurService>();
 
 var app = builder.Build();
 
