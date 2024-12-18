@@ -15,9 +15,9 @@ public class UsersController : ControllerBase
      private readonly EmailService _emailService;
 
     // Simuler une base de données (en mémoire)
-    private static readonly List<Users> _userDatabase = new()
+    private static readonly List<User> _userDatabase = new()
     {
-        new Users { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
+        new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
     };
     
     public UsersController(IPasswordService passwordService, EmailService emailService) 
@@ -29,16 +29,18 @@ public class UsersController : ControllerBase
 
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
-    
-        Users users= new Users();
-        users.Id = 1;    
-        users.Username = user.Username;
-        users.Pass = _passwordService.HashPassword(user.Password);
-        users.Email = user.Email;
-        
+
+        User users = new()
+        {
+            Id = 1,
+            Username = user.Username,
+            Pass = _passwordService.HashPassword(user.Password ?? ""),
+            Email = user.Email
+        };
+
         // TO DO : save to database 
 
-        await _emailService.SendEmailAsync(users.Email, "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username));
+        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
         return Ok("Compte créé");
     }
 
@@ -54,7 +56,7 @@ public class UsersController : ControllerBase
             return Unauthorized("Utilisateur non trouvé.");
 
         // Vérification du mot de passe
-        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.Pass);
+        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.Pass ?? "");
         if (!isPasswordValid)
             return Unauthorized("Mot de passe incorrect.");
         // Retourner les données de l'utilisateur
@@ -85,7 +87,7 @@ public class UsersController : ControllerBase
     [HttpPost("valider")]
     public async Task<IActionResult> ValiderUtilisateur([FromForm] int id)
     {
-        Users user = new Users();
+        Users user = new ();
         // TODO: Get user by id 
         // var user = await _context.Users.FindAsync(id);
 
@@ -99,11 +101,14 @@ public class UsersController : ControllerBase
         //     return BadRequest(new { message = "Utilisateur déjà validé." });
         // }
 
-        // Fonction
-        user.EstValide = true;
+
+        // Fonction 
+        // user.EstValide = true;
+
         // Valider changement
         // await _context.SaveChangesAsync();
 
+        await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
     }
 
