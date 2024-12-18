@@ -1,10 +1,10 @@
 CREATE DATABASE fournisseur_identite;
 \c fournisseur_identite
-CREATE TABLE Users(
+CREATE TABLE utilisateur(
     id serial PRIMARY KEY,
-    username varchar(50) unique,
+    nom_utilisateur varchar(50) unique,
     email varchar(50) unique,
-    pass varchar(50) not null,
+    mot_de_passe varchar(50) not null,
     est_valide boolean default false,
     nb_tentative integer default 0
 );
