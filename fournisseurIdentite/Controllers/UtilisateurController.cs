@@ -20,7 +20,7 @@ public class UtilisateurController : ControllerBase
         new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
     };
     
-    public UsersController(IPasswordService passwordService, EmailService emailService) 
+    public UtilisateurController(IPasswordService passwordService, EmailService emailService) 
     {
         _emailService = emailService;
         _passwordService = passwordService;
