@@ -101,8 +101,10 @@ public class UsersController : ControllerBase
         //     return BadRequest(new { message = "Utilisateur déjà validé." });
         // }
 
+
         // Fonction 
         // user.EstValide = true;
+
         // Valider changement
         // await _context.SaveChangesAsync();
 
