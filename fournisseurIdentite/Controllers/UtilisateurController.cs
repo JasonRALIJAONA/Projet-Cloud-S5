@@ -9,7 +9,7 @@ namespace fournisseurIdentite.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController : ControllerBase
+public class UtilisateurController : ControllerBase
 {
      private readonly IPasswordService _passwordService;
      private readonly EmailService _emailService;
