@@ -1,8 +1,8 @@
 namespace fournisseurIdentite.src.DTO
 {
-    public UsersRequest {
-        public String Username { get; set; }
-        public String Mail { get; set; }
-        public String Password { get; set; }
+    public class UsersRequest {
+        public string? Username { get; set; }
+        public string? Mail { get; set; }
+        public string? Password { get; set; }
     }
 }
