@@ -11,6 +11,7 @@ namespace fournisseurIdentite.Controllers;
 [Route("api/[controller]")]
 public class UtilisateurController : ControllerBase
 {
+    private readonly FournisseurIdentiteContext _context;
      private readonly IPasswordService _passwordService;
      private readonly EmailService _emailService;
 
@@ -20,8 +21,9 @@ public class UtilisateurController : ControllerBase
         new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
     };
     
-    public UtilisateurController(IPasswordService passwordService, EmailService emailService) 
+    public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context) 
     {
+        _context = context;
         _emailService = emailService;
         _passwordService = passwordService;
     }
@@ -39,9 +41,30 @@ public class UtilisateurController : ControllerBase
         };
 
         // TO DO : save to database 
-
+        await _context.Users.AddAsync(users);
+        await _context.SaveChangesAsync();
         await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
         return Ok("Compte créé");
+    }
+    [HttpPost("test")]
+    public async Task<IActionResult> testBase(){
+        
+        User users = new()
+        {
+            Id = 1,
+            Username = "rakoto",
+            Pass = "123",
+            Email = "rakoto",
+            NbTentative = 0,
+            EstValide = false
+            
+        };
+        
+        await _context.Users.AddAsync(users);
+        await _context.SaveChangesAsync();
+        // await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
+        return Ok("Compte créé");
+       
     }
 
     [HttpPost("login")]
@@ -89,24 +112,24 @@ public class UtilisateurController : ControllerBase
     {
         Users user = new ();
         // TODO: Get user by id 
-        // var user = await _context.Users.FindAsync(id);
+        var utilisateur = await _context.Users.FindAsync(id);
 
-        // if (user == null)
-        // {
-        //     return NotFound(new { message = "Utilisateur non trouvé." });
-        // }
+        if (utilisateur == null)
+        {
+            return NotFound(new { message = "Utilisateur non trouvé." });
+        }
 
-        // if (user.IsValidated)
-        // {
-        //     return BadRequest(new { message = "Utilisateur déjà validé." });
-        // }
+        if (utilisateur.EstValide ?? false)
+        {
+            return BadRequest(new { message = "Utilisateur déjà validé." });
+        }
 
 
         // Fonction 
-        // user.EstValide = true;
+        utilisateur.EstValide = true;
 
         // Valider changement
-        // await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
         await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
