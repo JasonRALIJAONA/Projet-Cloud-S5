@@ -15,9 +15,9 @@ public class UsersController : ControllerBase
      private readonly EmailService _emailService;
 
     // Simuler une base de données (en mémoire)
-    private static readonly List<Users> _userDatabase = new()
+    private static readonly List<User> _userDatabase = new()
     {
-        new Users { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
+        new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
     };
     
     public UsersController(IPasswordService passwordService, EmailService emailService) 
@@ -30,7 +30,7 @@ public class UsersController : ControllerBase
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
 
-        Users users = new()
+        User users = new()
         {
             Id = 1,
             Username = user.Username,
@@ -40,7 +40,7 @@ public class UsersController : ControllerBase
 
         // TO DO : save to database 
 
-        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id ?? 0, users.Username ?? ""));
+        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
         return Ok("Compte créé");
     }
 
@@ -102,7 +102,7 @@ public class UsersController : ControllerBase
         // }
 
         // Fonction 
-        user.EstValide = true;
+        // user.EstValide = true;
         // Valider changement
         // await _context.SaveChangesAsync();
 
