@@ -29,16 +29,18 @@ public class UsersController : ControllerBase
 
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
-    
-        Users users= new Users();
-        users.Id = 1;    
-        users.Username = user.Username;
-        users.Pass = _passwordService.HashPassword(user.Password);
-        users.Email = user.Email;
-        
+
+        Users users = new()
+        {
+            Id = 1,
+            Username = user.Username,
+            Pass = _passwordService.HashPassword(user.Password ?? ""),
+            Email = user.Email
+        };
+
         // TO DO : save to database 
 
-        await _emailService.SendEmailAsync(users.Email, "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username));
+        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id ?? 0, users.Username ?? ""));
         return Ok("Compte créé");
     }
 
@@ -54,7 +56,7 @@ public class UsersController : ControllerBase
             return Unauthorized("Utilisateur non trouvé.");
 
         // Vérification du mot de passe
-        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.Pass);
+        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.Pass ?? "");
         if (!isPasswordValid)
             return Unauthorized("Mot de passe incorrect.");
         // Retourner les données de l'utilisateur
@@ -85,7 +87,7 @@ public class UsersController : ControllerBase
     [HttpPost("valider")]
     public async Task<IActionResult> ValiderUtilisateur([FromForm] int id)
     {
-        Users user = new Users();
+        Users user = new ();
         // TODO: Get user by id 
         // var user = await _context.Users.FindAsync(id);
 
@@ -104,6 +106,7 @@ public class UsersController : ControllerBase
         // Valider changement
         // await _context.SaveChangesAsync();
 
+        await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
     }
 
