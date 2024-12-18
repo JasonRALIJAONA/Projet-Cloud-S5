@@ -9,6 +9,9 @@ namespace fournisseurIdentite.src.DTO
         public string ?Email { get; set; }
         public string ?Pass { get; set; }
 
+        public bool EstValide { get; set; }
+        public int NbTentative { get; set; }
+
         public static Users CreateInstance(int id, string username, string email, string rawPassword, IPasswordService passwordService)
         {
             string hashedPassword = passwordService.HashPassword(rawPassword);
