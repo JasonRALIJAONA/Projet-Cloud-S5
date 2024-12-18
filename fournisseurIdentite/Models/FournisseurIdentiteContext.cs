@@ -37,6 +37,9 @@ public partial class FournisseurIdentiteContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .HasColumnName("email");
+            entity.Property(e => e.EstValide)
+                .HasDefaultValue(false)
+                .HasColumnName("est_valide");
             entity.Property(e => e.NbTentative)
                 .HasDefaultValue(0)
                 .HasColumnName("nb_tentative");
