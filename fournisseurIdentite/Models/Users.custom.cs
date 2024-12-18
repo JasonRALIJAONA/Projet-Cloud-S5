@@ -2,7 +2,7 @@ using fournisseurIdentite.Services;
 
 namespace fournisseurIdentite.Models
 {
-    public partial class User
+    public partial class Users
     {
         public static User CreateInstance(int id, string username, string email, string rawPassword, IPasswordService passwordService)
         {
