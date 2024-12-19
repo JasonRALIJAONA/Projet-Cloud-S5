@@ -126,5 +126,49 @@ public class UtilisateurController : ControllerBase
             return BadRequest($"Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
         }
     }
+   [HttpPut("update-info")]
+    public IActionResult UpdateUtilisateur([FromBody] UpdateUtilisateurDto dto)
+    {
+        if (dto == null)
+        {
+            return BadRequest("dto object is null.");
+        }
+
+        try
+        {
+           var utilisateur = _service.UpdateUtilisateur(dto);
+        return Ok(utilisateur);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+   [HttpPut("update-tentative")]
+    public IActionResult AddTentative([FromBody] UtilisateurTentativeDto dto)
+    {
+        if (dto == null)
+        {
+            return BadRequest("dto object is null.");
+        }
+
+        try
+        {
+           var utilisateur = _service.AddTentative(dto);
+        return Ok(utilisateur);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
 }
