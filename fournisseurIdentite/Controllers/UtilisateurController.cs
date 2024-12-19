@@ -13,17 +13,18 @@ public class UtilisateurController : ControllerBase
 {
      private readonly IPasswordService _passwordService;
      private readonly EmailService _emailService;
-
+    private readonly UtilisateurService _service;
     // Simuler une base de données (en mémoire)
     private static readonly List<User> _userDatabase = new()
     {
         new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
     };
     
-    public UtilisateurController(IPasswordService passwordService, EmailService emailService) 
+    public UtilisateurController(IPasswordService passwordService, EmailService emailService, UtilisateurService service)
     {
-        _emailService = emailService;
         _passwordService = passwordService;
+        _emailService = emailService;
+        _service = service;
     }
     private readonly User? _users;
 
@@ -111,6 +112,19 @@ public class UtilisateurController : ControllerBase
         await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
     }
-
+    [HttpPost("inserer")]
+     public IActionResult CreateUtilisateur([FromBody] Utilisateur utilisateur)
+    {
+        
+        try
+        {
+            var insertedUser = _service.CreateUtilisateur(utilisateur);
+            return Ok(insertedUser);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+        }
+    }
 
 }
