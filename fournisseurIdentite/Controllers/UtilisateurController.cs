@@ -50,6 +50,7 @@ public class UtilisateurController : ControllerBase
         return Ok("Compte créé");
     }
 
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
@@ -57,7 +58,7 @@ public class UtilisateurController : ControllerBase
             return BadRequest("Email ou mot de passe manquant.");
 
         // Recherche de l'utilisateur dans la base
-        var user =  _context.Utilisateurs.FirstOrDefault(u => u.Email == loginRequest.Email);
+        var user = _context.Utilisateurs.FirstOrDefault(u => u.Email == loginRequest.Email);
 
         if (user == null)
             return Unauthorized("Utilisateur non trouvé.");
@@ -66,7 +67,57 @@ public class UtilisateurController : ControllerBase
         var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.MotDePasse ?? "");
         if (!isPasswordValid)
             return Unauthorized("Mot de passe incorrect.");
-        // Retourner les données de l'utilisateur
+
+        // Génération du PIN
+        string pin = _pinService.CreatePIN(5);
+        HttpContext.Session.SetString(PinSessionKey, pin);
+        HttpContext.Session.SetString(PinExpirationSessionKey, DateTime.UtcNow.AddSeconds(90).ToString("o"));
+
+        // Envoi de l'e-mail avec le PIN
+        await _emailService.SendEmailAsync(user.Email ?? "", "Validation du compte", EmailBuilder.buildPINMail(pin, user.NomUtilisateur ?? ""));
+
+        return Ok(new { message = "Un PIN a été envoyé pour validation. Vous avez 90 secondes pour le valider." });
+    }
+
+
+    [HttpPost("validerPin")]
+    public IActionResult ValiderPin([FromBody] PinValidationRequest request)
+    {
+        // Vérifier si le PIN existe dans la session
+        string? sessionPin = HttpContext.Session.GetString(PinSessionKey);
+        string? sessionPinExpiration = HttpContext.Session.GetString(PinExpirationSessionKey);
+
+        if (string.IsNullOrEmpty(sessionPin) || string.IsNullOrEmpty(sessionPinExpiration))
+        {
+            return Unauthorized("PIN non trouvé ou session expirée.");
+        }
+
+        // Vérifier si le PIN correspond
+        if (sessionPin != request.Pin)
+        {
+            return Unauthorized("PIN incorrect.");
+        }
+
+        // Vérifier si le PIN a expiré
+        if (DateTime.TryParse(sessionPinExpiration, out DateTime expirationDate))
+        {
+            if (DateTime.UtcNow > expirationDate)
+            {
+                return Unauthorized("Le PIN a expiré.");
+            }
+        }
+        else
+        {
+            return BadRequest("Erreur dans le format d'expiration du PIN.");
+        }
+
+        // PIN validé, récupérer les données de l'utilisateur
+        var user = _context.Utilisateurs.FirstOrDefault(u => u.Id == request.UserId);
+        if (user == null)
+        {
+            return NotFound("Utilisateur non trouvé.");
+        }
+
         var userData = new
         {
             user.Id,
@@ -74,14 +125,10 @@ public class UtilisateurController : ControllerBase
             user.Email
         };
 
-        string pin = _pinService.CreatePIN(5);
-        HttpContext.Session.SetString(PinSessionKey, pin);
-        HttpContext.Session.SetString(PinExpirationSessionKey, DateTime.UtcNow.AddSeconds(90).ToString("o"));
-        await _emailService.SendEmailAsync(userData.Email ?? "", "Validation du compte", EmailBuilder.buildPINMail(pin, userData.NomUtilisateur ?? ""));
-
-        await Task.CompletedTask;
         return Ok(userData);
     }
+
+
     [HttpGet("valider")]
     public IActionResult ValiderForm([FromQuery] int id)
     {
@@ -125,6 +172,7 @@ public class UtilisateurController : ControllerBase
         await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
     }
+
     [HttpPost("inserer")]
      public IActionResult CreateUtilisateur([FromBody] Utilisateur utilisateur)
     {
@@ -139,6 +187,7 @@ public class UtilisateurController : ControllerBase
             return BadRequest($"Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
         }
     }
+
    [HttpPut("update-info")]
     public IActionResult UpdateUtilisateur([FromBody] UpdateUtilisateurDto dto)
     {
@@ -161,6 +210,7 @@ public class UtilisateurController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
    [HttpPut("update-tentative")]
     public IActionResult AddTentative([FromBody] UtilisateurTentativeDto dto)
     {
