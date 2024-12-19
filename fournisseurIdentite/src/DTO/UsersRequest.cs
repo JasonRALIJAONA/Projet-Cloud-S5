@@ -7,4 +7,4 @@ namespace fournisseurIdentite.src.DTO
 
         public string? Password { get; set; }
     }
-}
+} 

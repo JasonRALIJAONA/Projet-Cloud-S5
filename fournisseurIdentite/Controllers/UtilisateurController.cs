@@ -11,18 +11,21 @@ namespace fournisseurIdentite.Controllers;
 [Route("api/[controller]")]
 public class UtilisateurController : ControllerBase
 {
+    private const string PinSessionKey = "Pin";
+    private const string PinExpirationSessionKey = "PinExpiration";
+    private readonly FournisseurIdentiteContext _context;
      private readonly IPasswordService _passwordService;
      private readonly EmailService _emailService;
+     private readonly PINService _pinService;
     private readonly UtilisateurService _service;
     // Simuler une base de données (en mémoire)
-    private static readonly List<User> _userDatabase = new()
-    {
-        new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
-    };
+
     
-    public UtilisateurController(IPasswordService passwordService, EmailService emailService, UtilisateurService service)
+    public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context, PINService pinservice, UtilisateurService service) 
     {
+        _context = context;
         _passwordService = passwordService;
+        _pinService = pinservice;
         _emailService = emailService;
         _service = service;
     }
@@ -31,19 +34,22 @@ public class UtilisateurController : ControllerBase
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
 
-        User users = new()
+        Console.WriteLine(user+"  h");
+        Utilisateur users = new()
         {
-            Id = 1,
-            Username = user.Username,
-            Pass = _passwordService.HashPassword(user.Password ?? ""),
-            Email = user.Email
+            NomUtilisateur = user.Username,
+            Email = user.Email,
+            MotDePasse = _passwordService.HashPassword(user.Password ?? "")
         };
+        Console.WriteLine(users);
 
         // TO DO : save to database 
-
-        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
+        await _context.Utilisateurs.AddAsync(users);
+        await _context.SaveChangesAsync();
+        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.NomUtilisateur ?? ""));
         return Ok("Compte créé");
     }
+
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
@@ -52,24 +58,78 @@ public class UtilisateurController : ControllerBase
             return BadRequest("Email ou mot de passe manquant.");
 
         // Recherche de l'utilisateur dans la base
-        var user = _userDatabase.FirstOrDefault(u => u.Email == loginRequest.Email);
+        var user = _context.Utilisateurs.FirstOrDefault(u => u.Email == loginRequest.Email);
+
         if (user == null)
             return Unauthorized("Utilisateur non trouvé.");
 
         // Vérification du mot de passe
-        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.Pass ?? "");
+        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.MotDePasse ?? "");
         if (!isPasswordValid)
             return Unauthorized("Mot de passe incorrect.");
-        // Retourner les données de l'utilisateur
+
+        // Génération du PIN
+        string pin = _pinService.CreatePIN(5);
+        HttpContext.Session.SetString(PinSessionKey, pin);
+        HttpContext.Session.SetString(PinExpirationSessionKey, DateTime.UtcNow.AddSeconds(90).ToString("o"));
+
+        // Envoi de l'e-mail avec le PIN
+        await _emailService.SendEmailAsync(user.Email ?? "", "Validation du compte", EmailBuilder.buildPINMail(pin, user.NomUtilisateur ?? ""));
+
+        return Ok(new { message = "Un PIN a été envoyé pour validation. Vous avez 90 secondes pour le valider." });
+    }
+
+
+    [HttpPost("validerPin")]
+    public IActionResult ValiderPin([FromBody] PinValidationRequest request)
+    {
+        // Vérifier si le PIN existe dans la session
+        string? sessionPin = HttpContext.Session.GetString(PinSessionKey);
+        string? sessionPinExpiration = HttpContext.Session.GetString(PinExpirationSessionKey);
+
+        if (string.IsNullOrEmpty(sessionPin) || string.IsNullOrEmpty(sessionPinExpiration))
+        {
+            return Unauthorized("PIN non trouvé ou session expirée.");
+        }
+
+        // Vérifier si le PIN correspond
+        if (sessionPin != request.Pin)
+        {
+            return Unauthorized("PIN incorrect.");
+        }
+
+        // Vérifier si le PIN a expiré
+        if (DateTime.TryParse(sessionPinExpiration, null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime expirationDate))
+        {
+            if (DateTime.UtcNow > expirationDate)
+            {
+                return Unauthorized("Le PIN a expiré.");
+            }
+        }
+        else
+        {
+            return BadRequest("Erreur dans le format d'expiration du PIN.");
+        }
+
+
+        // PIN validé, récupérer les données de l'utilisateur
+        var user = _context.Utilisateurs.FirstOrDefault(u => u.Id == request.UserId);
+        if (user == null)
+        {
+            return NotFound("Utilisateur non trouvé.");
+        }
+
         var userData = new
         {
             user.Id,
-            user.Username,
+            user.NomUtilisateur,
             user.Email
         };
-        await Task.CompletedTask;
+
         return Ok(userData);
     }
+
+
     [HttpGet("valider")]
     public IActionResult ValiderForm([FromQuery] int id)
     {
@@ -89,29 +149,31 @@ public class UtilisateurController : ControllerBase
     public async Task<IActionResult> ValiderUtilisateur([FromForm] int id)
     {
         Users user = new ();
+        Console.WriteLine(id);
         // TODO: Get user by id 
-        // var user = await _context.Users.FindAsync(id);
+        var utilisateur = await _context.Utilisateurs.FindAsync(id);
 
-        // if (user == null)
-        // {
-        //     return NotFound(new { message = "Utilisateur non trouvé." });
-        // }
+        if (utilisateur == null)
+        {
+            return NotFound(new { message = "Utilisateur non trouvé." });
+        }
 
-        // if (user.IsValidated)
-        // {
-        //     return BadRequest(new { message = "Utilisateur déjà validé." });
-        // }
+        if (utilisateur.EstValide ?? false)
+        {
+            return BadRequest(new { message = "Utilisateur déjà validé." });
+        }
 
 
         // Fonction 
-        // user.EstValide = true;
+        utilisateur.EstValide = true;
 
         // Valider changement
-        // await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
         await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
     }
+
     [HttpPost("inserer")]
      public IActionResult CreateUtilisateur([FromBody] Utilisateur utilisateur)
     {
@@ -124,6 +186,52 @@ public class UtilisateurController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest($"Error: {ex.Message}, Inner Exception: {ex.InnerException?.Message}");
+        }
+    }
+
+   [HttpPut("update-info")]
+    public IActionResult UpdateUtilisateur([FromBody] UpdateUtilisateurDto dto)
+    {
+        if (dto == null)
+        {
+            return BadRequest("dto object is null.");
+        }
+
+        try
+        {
+           var utilisateur = _service.UpdateUtilisateur(dto);
+        return Ok(utilisateur);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+   [HttpPut("update-tentative")]
+    public IActionResult AddTentative([FromBody] UtilisateurTentativeDto dto)
+    {
+        if (dto == null)
+        {
+            return BadRequest("dto object is null.");
+        }
+
+        try
+        {
+           var utilisateur = _service.AddTentative(dto);
+        return Ok(utilisateur);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 
