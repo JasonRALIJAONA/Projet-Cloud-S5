@@ -16,6 +16,6 @@
     dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 * pour mapper la base vers le code
-    dotnet ef dbcontext scaffold "Host=127.0.0.1;Database=fournisseur_identite;Username=postgres;Password=Etu002610" Npgsql.EntityFrameworkCore.PostgreSQL -o Models --force
+    dotnet ef dbcontext scaffold "Host=127.0.0.1;Database=fournisseur_identite;Username=postgres;Password=admin" Npgsql.EntityFrameworkCore.PostgreSQL -o Models --force
 
 

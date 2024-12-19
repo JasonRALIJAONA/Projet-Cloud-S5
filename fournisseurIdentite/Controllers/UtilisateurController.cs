@@ -16,9 +16,9 @@ public class UtilisateurController : ControllerBase
      private readonly EmailService _emailService;
 
     // Simuler une base de données (en mémoire)
-    private static readonly List<User> _userDatabase = new()
+    private static readonly List<Utilisateur> _userDatabase = new()
     {
-        new User { Id = 1, Username = "JohnDoe", Email = "johndoe@example.com", Pass = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
+        new Utilisateur { Id = 1, NomUtilisateur = "JohnDoe", Email = "johndoe@example.com", MotDePasse = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
     };
     
     public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context) 
@@ -32,39 +32,20 @@ public class UtilisateurController : ControllerBase
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
 
-        User users = new()
+        Console.WriteLine(user+"  h");
+        Utilisateur users = new()
         {
-            Id = 1,
-            Username = user.Username,
-            Pass = _passwordService.HashPassword(user.Password ?? ""),
-            Email = user.Email
+            NomUtilisateur = user.Username,
+            Email = user.Email,
+            MotDePasse = _passwordService.HashPassword(user.Password ?? "")
         };
+        Console.WriteLine(users);
 
         // TO DO : save to database 
-        await _context.Users.AddAsync(users);
+        await _context.Utilisateurs.AddAsync(users);
         await _context.SaveChangesAsync();
-        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
+        await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.NomUtilisateur ?? ""));
         return Ok("Compte créé");
-    }
-    [HttpPost("test")]
-    public async Task<IActionResult> testBase(){
-        
-        User users = new()
-        {
-            Id = 1,
-            Username = "rakoto",
-            Pass = "123",
-            Email = "rakoto",
-            NbTentative = 0,
-            EstValide = false
-            
-        };
-        
-        await _context.Users.AddAsync(users);
-        await _context.SaveChangesAsync();
-        // await _emailService.SendEmailAsync(users.Email ?? "", "Validation du compte", EmailBuilder.buildValidationMail(users.Id, users.Username ?? ""));
-        return Ok("Compte créé");
-       
     }
 
     [HttpPost("login")]
@@ -79,14 +60,14 @@ public class UtilisateurController : ControllerBase
             return Unauthorized("Utilisateur non trouvé.");
 
         // Vérification du mot de passe
-        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.Pass ?? "");
+        var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.MotDePasse ?? "");
         if (!isPasswordValid)
             return Unauthorized("Mot de passe incorrect.");
         // Retourner les données de l'utilisateur
         var userData = new
         {
             user.Id,
-            user.Username,
+            user.NomUtilisateur,
             user.Email
         };
         await Task.CompletedTask;
@@ -111,8 +92,9 @@ public class UtilisateurController : ControllerBase
     public async Task<IActionResult> ValiderUtilisateur([FromForm] int id)
     {
         Users user = new ();
+        Console.WriteLine(id);
         // TODO: Get user by id 
-        var utilisateur = await _context.Users.FindAsync(id);
+        var utilisateur = await _context.Utilisateurs.FindAsync(id);
 
         if (utilisateur == null)
         {
