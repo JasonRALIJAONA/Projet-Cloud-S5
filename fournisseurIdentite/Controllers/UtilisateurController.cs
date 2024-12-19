@@ -130,7 +130,7 @@ public class UtilisateurController : ControllerBase
     }
 
 
-    [HttpGet("valider")]
+    [HttpGet("formValiderIncription")]
     public IActionResult ValiderForm([FromQuery] int id)
     {
         return Content($@"
@@ -145,7 +145,7 @@ public class UtilisateurController : ControllerBase
             </html>", "text/html");
     }
 
-    [HttpPost("valider")]
+    [HttpPost("validerCompte")]
     public async Task<IActionResult> ValiderUtilisateur([FromForm] int id)
     {
         Users user = new ();
