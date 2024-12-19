@@ -1,5 +1,6 @@
 CREATE DATABASE fournisseur_identite;
 \c fournisseur_ide ntite
+
 CREATE TABLE utilisateur(
     id serial PRIMARY KEY, 
     nom_utilisateur varchar(50) unique,

@@ -99,7 +99,7 @@ public class UtilisateurController : ControllerBase
         }
 
         // Vérifier si le PIN a expiré
-        if (DateTime.TryParse(sessionPinExpiration, out DateTime expirationDate))
+        if (DateTime.TryParse(sessionPinExpiration, null, System.Globalization.DateTimeStyles.RoundtripKind, out DateTime expirationDate))
         {
             if (DateTime.UtcNow > expirationDate)
             {
@@ -110,6 +110,7 @@ public class UtilisateurController : ControllerBase
         {
             return BadRequest("Erreur dans le format d'expiration du PIN.");
         }
+
 
         // PIN validé, récupérer les données de l'utilisateur
         var user = _context.Utilisateurs.FirstOrDefault(u => u.Id == request.UserId);
