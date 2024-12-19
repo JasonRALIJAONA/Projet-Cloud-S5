@@ -11,6 +11,25 @@ namespace fournisseurIdentite.src.Utils
             String link = "<a href=http://localhost:5092/api/users/valider?id="+idUser+">Valider</a>";
             return header + body + link+ _footer;
         }
-        
+        public static String buildPINMail(String pin, String username){
+            string emailBody = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Votre Code PIN</title>
+                </head>
+                <body>
+                    <p>Bonjour {username},</p>
+                    <p>Voici votre code PIN pour accéder à votre compte :</p>
+                    <p><strong style='font-size: 20px;'>{pin}</strong></p>
+                    <p>Ce code est valable pendant 90 secondes.</p>
+                    <p>Si vous n'avez pas demandé ce code, veuillez ignorer cet email.</p>
+                    <p>Cordialement,</p>
+                </body>
+                </html>"; 
+            return emailBody+_footer;
+        }
     }
 }

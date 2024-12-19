@@ -11,21 +11,22 @@ namespace fournisseurIdentite.Controllers;
 [Route("api/[controller]")]
 public class UtilisateurController : ControllerBase
 {
+    private const string PinSessionKey = "Pin";
+    private const string PinExpirationSessionKey = "PinExpiration";
     private readonly FournisseurIdentiteContext _context;
      private readonly IPasswordService _passwordService;
      private readonly EmailService _emailService;
+     private readonly PINService _pinService;
 
     // Simuler une base de données (en mémoire)
-    private static readonly List<Utilisateur> _userDatabase = new()
-    {
-        new Utilisateur { Id = 1, NomUtilisateur = "JohnDoe", Email = "johndoe@example.com", MotDePasse = "WT6UAQCmn6gjl1u8S6jwCS/ldc1VrA2TjOz/zY8iqcSqyc52W/uuE2/deiZpJVj4" } // Hash simulé
-    };
+
     
-    public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context) 
+    public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context, PINService pinservice) 
     {
         _context = context;
         _emailService = emailService;
         _passwordService = passwordService;
+        _pinService = pinservice;
     }
     private readonly User? _users;
 
@@ -55,7 +56,8 @@ public class UtilisateurController : ControllerBase
             return BadRequest("Email ou mot de passe manquant.");
 
         // Recherche de l'utilisateur dans la base
-        var user = _userDatabase.FirstOrDefault(u => u.Email == loginRequest.Email);
+        var user =  _context.Utilisateurs.FirstOrDefault(u => u.Email == loginRequest.Email);
+
         if (user == null)
             return Unauthorized("Utilisateur non trouvé.");
 
@@ -70,6 +72,12 @@ public class UtilisateurController : ControllerBase
             user.NomUtilisateur,
             user.Email
         };
+
+        string pin = _pinService.CreatePIN(5);
+        HttpContext.Session.SetString(PinSessionKey, pin);
+        HttpContext.Session.SetString(PinExpirationSessionKey, DateTime.UtcNow.AddSeconds(90).ToString("o"));
+        await _emailService.SendEmailAsync(userData.Email ?? "", "Validation du compte", EmailBuilder.buildPINMail(pin, userData.NomUtilisateur ?? ""));
+
         await Task.CompletedTask;
         return Ok(userData);
     }
@@ -116,6 +124,5 @@ public class UtilisateurController : ControllerBase
         await Task.CompletedTask;
         return Ok(new { message = "Compte validé avec succès." });
     }
-
 
 }
