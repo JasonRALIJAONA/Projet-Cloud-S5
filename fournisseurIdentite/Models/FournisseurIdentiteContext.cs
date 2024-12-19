@@ -16,6 +16,7 @@ public partial class FournisseurIdentiteContext : DbContext
     }
 
     public virtual DbSet<Utilisateur> Utilisateurs { get; set; }
+    public virtual DbSet<Utilisateur> Utilisateurs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -26,11 +27,15 @@ public partial class FournisseurIdentiteContext : DbContext
         modelBuilder.Entity<Utilisateur>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("utilisateur_pkey");
+            entity.HasKey(e => e.Id).HasName("utilisateur_pkey");
 
+            entity.ToTable("utilisateur");
             entity.ToTable("utilisateur");
 
             entity.HasIndex(e => e.Email, "utilisateur_email_key").IsUnique();
+            entity.HasIndex(e => e.Email, "utilisateur_email_key").IsUnique();
 
+            entity.HasIndex(e => e.NomUtilisateur, "utilisateur_nom_utilisateur_key").IsUnique();
             entity.HasIndex(e => e.NomUtilisateur, "utilisateur_nom_utilisateur_key").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
@@ -43,11 +48,16 @@ public partial class FournisseurIdentiteContext : DbContext
             entity.Property(e => e.MotDePasse)
                 .HasMaxLength(50)
                 .HasColumnName("mot_de_passe");
+            entity.Property(e => e.MotDePasse)
+                .HasMaxLength(50)
+                .HasColumnName("mot_de_passe");
             entity.Property(e => e.NbTentative)
                 .HasDefaultValue(0)
                 .HasColumnName("nb_tentative");
             entity.Property(e => e.NomUtilisateur)
+            entity.Property(e => e.NomUtilisateur)
                 .HasMaxLength(50)
+                .HasColumnName("nom_utilisateur");
                 .HasColumnName("nom_utilisateur");
         });
 
