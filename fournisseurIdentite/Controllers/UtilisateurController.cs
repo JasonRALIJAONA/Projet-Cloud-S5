@@ -21,7 +21,7 @@ public class UtilisateurController : ControllerBase
     // Simuler une base de données (en mémoire)
 
     
-    public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context, PINService pinservice) 
+    public UtilisateurController(IPasswordService passwordService, EmailService emailService, FournisseurIdentiteContext context, PINService pinservice, UtilisateurService service) 
     {
         _context = context;
         _passwordService = passwordService;
