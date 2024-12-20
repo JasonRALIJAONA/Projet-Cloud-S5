@@ -29,7 +29,6 @@ public class UtilisateurController : ControllerBase
         _emailService = emailService;
         _service = service;
     }
-    private readonly User? _users;
 
     [HttpPost("inscription")]
     public async Task<IActionResult> Inscription([FromBody] UsersRequest user){
@@ -65,8 +64,15 @@ public class UtilisateurController : ControllerBase
 
         // Vérification du mot de passe
         var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.MotDePasse ?? "");
+
         if (!isPasswordValid)
-            return Unauthorized("Mot de passe incorrect.");
+        {
+            _service.AddTentative(loginRequest.Email);
+
+            return Unauthorized("Email ou mot de passe incorrect.");
+        }
+
+        _service.ReinitializeTentative(loginRequest.Email);
 
         // Génération du PIN
         string pin = _pinService.CreatePIN(5);
@@ -92,9 +98,17 @@ public class UtilisateurController : ControllerBase
             return Unauthorized("PIN non trouvé ou session expirée.");
         }
 
+
+        var user = _context.Utilisateurs.FirstOrDefault(u => u.Id == request.UserId);
+        if (user == null)
+        {
+            return NotFound("Utilisateur non trouvé.");
+        }
+
         // Vérifier si le PIN correspond
         if (sessionPin != request.Pin)
         {
+            _service.AddTentative(user.Email);
             return Unauthorized("PIN incorrect.");
         }
 
@@ -111,13 +125,7 @@ public class UtilisateurController : ControllerBase
             return BadRequest("Erreur dans le format d'expiration du PIN.");
         }
 
-
-        // PIN validé, récupérer les données de l'utilisateur
-        var user = _context.Utilisateurs.FirstOrDefault(u => u.Id == request.UserId);
-        if (user == null)
-        {
-            return NotFound("Utilisateur non trouvé.");
-        }
+        _service.ReinitializeTentative(user.Email);
 
         var userData = new
         {
@@ -200,29 +208,6 @@ public class UtilisateurController : ControllerBase
         try
         {
            var utilisateur = _service.UpdateUtilisateur(dto);
-        return Ok(utilisateur);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (ArgumentNullException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-   [HttpPut("update-tentative")]
-    public IActionResult AddTentative([FromBody] LoginRequest dto)
-    {
-        if (dto == null)
-        {
-            return BadRequest("dto object is null.");
-        }
-
-        try
-        {
-           var utilisateur = _service.AddTentative(dto);
         return Ok(utilisateur);
         }
         catch (InvalidOperationException ex)

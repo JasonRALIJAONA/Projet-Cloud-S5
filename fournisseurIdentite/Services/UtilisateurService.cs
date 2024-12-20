@@ -70,22 +70,46 @@ public class UtilisateurService
 
         return existingUtilisateur;
     }
-   public Utilisateur AddTentative(UtilisateurTentativeDto dto)
+//    public Utilisateur AddTentative(UtilisateurTentativeDto dto)
+//     {
+//         if (dto == null)
+//         {
+//             throw new ArgumentNullException(nameof(dto), "Le DTO ne peut pas être nul.");
+//         }
+
+//         // Rechercher l'utilisateur dans la base de données par ID
+//         var utilisateur = _context.Utilisateurs.Find(dto.Id);
+//         if (utilisateur == null)
+//         {
+//             throw new InvalidOperationException($"Utilisateur avec l'ID {dto.Id} n'existe pas.");
+//         }
+
+//         // Ajouter le nombre de tentatives et mettre à jour
+//         utilisateur.NbTentative = (utilisateur.NbTentative ?? 0) + dto.NbTentativeAjouter;
+
+//         // Sauvegarder les modifications
+//         _context.Utilisateurs.Update(utilisateur);
+//         _context.SaveChanges();
+
+//         // Retourner le nouveau nombre de tentatives
+//         return utilisateur;
+//     }
+   public Utilisateur AddTentative(string email)
     {
-        if (dto == null)
+        if (email == null)
         {
-            throw new ArgumentNullException(nameof(dto), "Le DTO ne peut pas être nul.");
+            throw new ArgumentNullException(nameof(email), "Le email ne peut pas être nul.");
         }
 
         // Rechercher l'utilisateur dans la base de données par ID
-        var utilisateur = _context.Utilisateurs.Find(dto.Id);
+        var utilisateur = _context.Utilisateurs.FirstOrDefault(u => u.Email == email);
         if (utilisateur == null)
         {
-            throw new InvalidOperationException($"Utilisateur avec l'ID {dto.Id} n'existe pas.");
+            throw new InvalidOperationException($"Utilisateur avec l'email {email} n'existe pas.");
         }
 
         // Ajouter le nombre de tentatives et mettre à jour
-        utilisateur.NbTentative = (utilisateur.NbTentative ?? 0) + dto.NbTentativeAjouter;
+        utilisateur.NbTentative = (utilisateur.NbTentative ?? 0) + 1;
 
         // Sauvegarder les modifications
         _context.Utilisateurs.Update(utilisateur);
@@ -94,24 +118,22 @@ public class UtilisateurService
         // Retourner le nouveau nombre de tentatives
         return utilisateur;
     }
-   public Utilisateur AddTentative(LoginRequest dto)
+
+    public Utilisateur ReinitializeTentative(string email)
     {
-        if (dto == null)
+        if (email == null)
         {
-            throw new ArgumentNullException(nameof(dto), "Le DTO ne peut pas être nul.");
+            throw new ArgumentNullException(nameof(email), "Le DTO ne peut pas être nul.");
         }
 
         // Rechercher l'utilisateur dans la base de données par ID
-        var utilisateur = _context.Utilisateurs.FirstOrDefault(u => u.Email == dto.Email);
+        var utilisateur = _context.Utilisateurs.FirstOrDefault(u => u.Email == email);
         if (utilisateur == null)
         {
-            throw new InvalidOperationException($"Utilisateur avec l'email {dto.Email} n'existe pas.");
+            throw new InvalidOperationException($"Utilisateur avec l'email {email} n'existe pas.");
         }
 
-        // Ajouter le nombre de tentatives et mettre à jour
-        utilisateur.NbTentative = (utilisateur.NbTentative ?? 0) + 1;
-
-        // Sauvegarder les modifications
+        utilisateur.NbTentative = 0;
         _context.Utilisateurs.Update(utilisateur);
         _context.SaveChanges();
 
