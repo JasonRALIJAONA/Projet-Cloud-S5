@@ -18,5 +18,17 @@
 * pour mapper la base vers le code
     dotnet ef dbcontext scaffold "Host=127.0.0.1;Database=fournisseur_identite;Username=postgres;Password=hajaina" Npgsql.EntityFrameworkCore.PostgreSQL -o Models --force
 
-* a faire 
-dotnet add package StackExchange.Redis
+# Pour le deploiement docker
+## build le conteneur
+docker-compose build 
+## activer le conteneur en arriere-plan
+docker-compose up -d
+## ouvrir l'invite de commande du projet dans le conteneur
+docker exec -it fournisseuridentite-webapp-1 bash
+## migrer la base 
+cd /app
+dotnet ef dbcontext scaffold "Host=postgres_db;Port=5432;Database=fournisseur_identite;Username=postgres;Password=Etu002610" Npgsql.EntityFrameworkCore.PostgreSQL -o Models --force --project fournisseurIdentite.csproj
+
+
+
+
