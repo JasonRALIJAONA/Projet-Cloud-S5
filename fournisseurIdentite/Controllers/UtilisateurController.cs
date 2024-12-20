@@ -73,7 +73,6 @@ public class UtilisateurController : ControllerBase
         }
 
         _service.ReinitializeTentative(loginRequest.Email);
-
         // Génération du PIN
         string pin = _pinService.CreatePIN(5);
         HttpContext.Session.SetString(PinSessionKey, pin);
@@ -108,7 +107,7 @@ public class UtilisateurController : ControllerBase
         // Vérifier si le PIN correspond
         if (sessionPin != request.Pin)
         {
-            _service.AddTentative(user.Email);
+            _service.AddTentative(user.Email ?? "");
             return Unauthorized("PIN incorrect.");
         }
 
@@ -125,7 +124,7 @@ public class UtilisateurController : ControllerBase
             return BadRequest("Erreur dans le format d'expiration du PIN.");
         }
 
-        _service.ReinitializeTentative(user.Email);
+        _service.ReinitializeTentative(user.Email ?? "");
 
         var userData = new
         {

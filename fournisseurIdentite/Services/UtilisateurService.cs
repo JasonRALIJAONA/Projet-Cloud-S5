@@ -7,9 +7,12 @@ public class UtilisateurService
 {
     private readonly FournisseurIdentiteContext _context;
 
-    public UtilisateurService(FournisseurIdentiteContext context)
+    private readonly IPasswordService _passwordService;
+
+    public UtilisateurService(FournisseurIdentiteContext context, IPasswordService passwordService)
     {
         _context = context;
+        _passwordService = passwordService;
     }
 
     public Utilisateur CreateUtilisateur(Utilisateur utilisateur)
@@ -62,9 +65,11 @@ public class UtilisateurService
         }
 
         existingUtilisateur.NomUtilisateur = updatedUtilisateur.NomUtilisateur ?? existingUtilisateur.NomUtilisateur;
-        existingUtilisateur.MotDePasse = string.IsNullOrEmpty(updatedUtilisateur.MotDePasse)
+        string mdphash = _passwordService.HashPassword((updatedUtilisateur.MotDePasse) ?? "");
+        existingUtilisateur.MotDePasse = string.IsNullOrEmpty(mdphash)
             ? existingUtilisateur.MotDePasse
-            : updatedUtilisateur.MotDePasse;
+            : mdphash;
+        
         _context.Utilisateurs.Update(existingUtilisateur);
         _context.SaveChanges();
 
