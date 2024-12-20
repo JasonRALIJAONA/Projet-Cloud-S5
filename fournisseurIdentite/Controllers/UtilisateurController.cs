@@ -149,7 +149,7 @@ public class UtilisateurController : ControllerBase
         }
     }
    [HttpPut("update-tentative")]
-    public IActionResult AddTentative([FromBody] UtilisateurTentativeDto dto)
+    public IActionResult AddTentative([FromBody] LoginRequest dto)
     {
         if (dto == null)
         {
