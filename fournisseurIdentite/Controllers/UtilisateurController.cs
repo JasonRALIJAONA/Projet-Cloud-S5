@@ -156,7 +156,7 @@ public class UtilisateurController : ControllerBase
     [HttpPost("validerCompte")]
     public async Task<IActionResult> ValiderUtilisateur([FromForm] int id)
     {
-        Users user = new ();
+        Utilisateur user = new ();
         Console.WriteLine(id);
         // TODO: Get user by id 
         var utilisateur = await _context.Utilisateurs.FindAsync(id);

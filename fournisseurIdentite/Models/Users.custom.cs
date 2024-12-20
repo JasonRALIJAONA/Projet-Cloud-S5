@@ -2,18 +2,18 @@ using fournisseurIdentite.Services;
 
 namespace fournisseurIdentite.Models
 {
-    public partial class Users
+    public partial class Utilisateur
     {
-        public static User CreateInstance(int id, string username, string email, string rawPassword, IPasswordService passwordService)
+        public static Utilisateur CreateInstance(int id, string username, string email, string rawPassword, IPasswordService passwordService)
         {
             string hashedPassword = passwordService.HashPassword(rawPassword);
 
-            return new User
+            return new Utilisateur
             {
                 Id = id,
-                Username = username,
+                NomUtilisateur = username,
                 Email = email,
-                Pass = hashedPassword
+                MotDePasse = hashedPassword
             };
         }
     }
