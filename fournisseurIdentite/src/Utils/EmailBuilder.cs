@@ -31,5 +31,23 @@ namespace fournisseurIdentite.src.Utils
                 </html>"; 
             return emailBody+_footer;
         }
+
+        public static String buildMessageMotDePasseReinitialiser(String username){
+            string emailBody = $@"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Votre Code PIN</title>
+                </head>
+                <body>
+                    <p>Bonjour {username},</p>
+                    <p>Votre mot de passe a bien ete reinitialiser</p>
+                    <p>Cordialement,</p>
+                </body>
+                </html>"; 
+            return emailBody+_footer;
+        }
     }
 }

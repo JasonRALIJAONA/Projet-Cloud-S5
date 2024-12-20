@@ -2,6 +2,7 @@ using System;
 using fournisseurIdentite.Services;
 using fournisseurIdentite.Models;
 using fournisseurIdentite.src.DTO;
+using fournisseurIdentite.src.Utils;
 
 public class UtilisateurService
 {
@@ -9,10 +10,13 @@ public class UtilisateurService
 
     private readonly IPasswordService _passwordService;
 
-    public UtilisateurService(FournisseurIdentiteContext context, IPasswordService passwordService)
+    private readonly EmailService _emailService;
+
+    public UtilisateurService(FournisseurIdentiteContext context, IPasswordService passwordService, EmailService emailService)
     {
         _context = context;
         _passwordService = passwordService;
+        _emailService = emailService;
     }
 
     public Utilisateur CreateUtilisateur(Utilisateur utilisateur)
@@ -27,7 +31,7 @@ public class UtilisateurService
         return utilisateur;
     }
 
-    public Utilisateur UpdateUtilisateur(UpdateUtilisateurDto updatedUtilisateur)
+    public async Task<Utilisateur> UpdateUtilisateur(UpdateUtilisateurDto updatedUtilisateur)
     {
         if (updatedUtilisateur == null)
         {
@@ -41,10 +45,17 @@ public class UtilisateurService
         }
 
         existingUtilisateur.NomUtilisateur = updatedUtilisateur.NomUtilisateur ?? existingUtilisateur.NomUtilisateur;
-        string mdphash = _passwordService.HashPassword((updatedUtilisateur.MotDePasse) ?? "");
-        existingUtilisateur.MotDePasse = string.IsNullOrEmpty(mdphash)
-            ? existingUtilisateur.MotDePasse
-            : mdphash;
+
+        if (!string.IsNullOrEmpty(updatedUtilisateur.MotDePasse))
+        {
+            string mdphash = _passwordService.HashPassword(updatedUtilisateur.MotDePasse);
+            existingUtilisateur.MotDePasse = mdphash;
+
+            // Réinitialiser le nombre de tentatives si le mot de passe est changé
+            ReinitializeTentative(updatedUtilisateur.email ?? "");
+
+            await _emailService.SendEmailAsync(updatedUtilisateur.email ?? "", "Reinitialisation Mot De Passe", EmailBuilder.buildMessageMotDePasseReinitialiser(updatedUtilisateur.NomUtilisateur ?? ""));
+        }
         
         _context.Utilisateurs.Update(existingUtilisateur);
         _context.SaveChanges();
