@@ -28,7 +28,10 @@ docker exec -it fournisseuridentite-webapp-1 bash
 ## migrer la base 
 cd /app
 dotnet ef dbcontext scaffold "Host=postgres_db;Port=5432;Database=fournisseur_identite;Username=postgres;Password=Etu002610" Npgsql.EntityFrameworkCore.PostgreSQL -o Models --force --project fournisseurIdentite.csproj
-
+## sortir de l'invite de commande
+exit
+## eteindre le conteneur
+docker-compose down
 
 
 
