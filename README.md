@@ -33,5 +33,7 @@ exit
 ## eteindre le conteneur
 docker-compose down
 
-
-
+## ouvrir l'invite de commande du conteneur postgres 
+docker exec -it postgres_db bash
+## connexion 
+psql -U postgres
