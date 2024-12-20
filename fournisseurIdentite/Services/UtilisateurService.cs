@@ -94,5 +94,29 @@ public class UtilisateurService
         // Retourner le nouveau nombre de tentatives
         return utilisateur;
     }
+   public Utilisateur AddTentative(LoginRequest dto)
+    {
+        if (dto == null)
+        {
+            throw new ArgumentNullException(nameof(dto), "Le DTO ne peut pas être nul.");
+        }
+
+        // Rechercher l'utilisateur dans la base de données par ID
+        var utilisateur = _context.Utilisateurs.FirstOrDefault(u => u.Email == dto.Email);
+        if (utilisateur == null)
+        {
+            throw new InvalidOperationException($"Utilisateur avec l'email {dto.Email} n'existe pas.");
+        }
+
+        // Ajouter le nombre de tentatives et mettre à jour
+        utilisateur.NbTentative = (utilisateur.NbTentative ?? 0) + 1;
+
+        // Sauvegarder les modifications
+        _context.Utilisateurs.Update(utilisateur);
+        _context.SaveChanges();
+
+        // Retourner le nouveau nombre de tentatives
+        return utilisateur;
+    }
 
 }
