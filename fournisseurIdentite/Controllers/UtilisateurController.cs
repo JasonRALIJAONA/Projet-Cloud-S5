@@ -62,6 +62,10 @@ public class UtilisateurController : ControllerBase
         if (user == null)
             return Unauthorized("Utilisateur non trouvé.");
 
+        // Vérification du nombre de tentatives
+        if (user.NbTentative >= 3)
+            return Unauthorized("Compte verrouillé après plusieurs tentatives. Veuillez réinitialiser votre mot de passe.");
+
         // Vérification du mot de passe
         var isPasswordValid = _passwordService.VerifyPassword(loginRequest.Password, user.MotDePasse ?? "");
 
@@ -73,6 +77,7 @@ public class UtilisateurController : ControllerBase
         }
 
         _service.ReinitializeTentative(loginRequest.Email);
+
         // Génération du PIN
         string pin = _pinService.CreatePIN(5);
         HttpContext.Session.SetString(PinSessionKey, pin);
@@ -97,12 +102,14 @@ public class UtilisateurController : ControllerBase
             return Unauthorized("PIN non trouvé ou session expirée.");
         }
 
-
         var user = _context.Utilisateurs.FirstOrDefault(u => u.Email == request.email);
         if (user == null)
         {
             return NotFound("Utilisateur non trouvé.");
         }
+
+        if (user.NbTentative >= 3)
+            return Unauthorized("Compte verrouillé après plusieurs tentatives. Veuillez réinitialiser votre mot de passe.");
 
         // Vérifier si le PIN correspond
         if (sessionPin != request.Pin)
