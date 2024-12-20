@@ -98,7 +98,7 @@ public class UtilisateurController : ControllerBase
         }
 
 
-        var user = _context.Utilisateurs.FirstOrDefault(u => u.Id == request.UserId);
+        var user = _context.Utilisateurs.FirstOrDefault(u => u.Email == request.email);
         if (user == null)
         {
             return NotFound("Utilisateur non trouvé.");
