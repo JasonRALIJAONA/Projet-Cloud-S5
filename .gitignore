@@ -75,3 +75,4 @@ Thumbs.db
 *.generated.*
 
 ProjetCloud/src/main/resources/application.properties
+ProjetCloud/target/classes/application.properties
