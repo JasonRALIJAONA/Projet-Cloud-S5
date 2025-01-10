@@ -1,4 +1,4 @@
-package main.java.ProjetCloud.Cloud.Models;
+package ProjetCloud.Cloud.Utilisateur;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;

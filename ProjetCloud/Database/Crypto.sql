@@ -1,5 +1,8 @@
-CREATE DATABASE Crypto;
-\c Crypto;
+\c Postgres;
+
+DROP DATABASE crypto;
+CREATE DATABASE crypto;
+\c crypto;
 
 CREATE TABLE utilisateur (
     id SERIAL PRIMARY KEY,

@@ -1,3 +1,7 @@
-main\java\ProjetCloud\Cloud\Models\Utilisateur.class
+ProjetCloud\Cloud\Fond\FondRepository.class
 main\java\ProjetCloud\Cloud\Models\Cryptomonnaie.class
 ProjetCloud\Cloud\CloudApplication.class
+ProjetCloud\Cloud\Fond\FondService.class
+ProjetCloud\Cloud\Utilisateur\Utilisateur.class
+ProjetCloud\Cloud\Fond\Fond.class
+ProjetCloud\Cloud\Fond\FondController.class
