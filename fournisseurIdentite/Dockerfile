@@ -1,37 +1,23 @@
-# Étape 1 : Construire l'application
+# Use the official .NET image as a parent image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+# Use the SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-
-# Copier tous les fichiers du projet
+WORKDIR /src
+COPY ["fournisseurIdentite/fournisseurIdentite.csproj", "fournisseurIdentite/"]
+RUN dotnet restore "fournisseurIdentite/fournisseurIdentite.csproj"
 COPY . .
+WORKDIR "/src/fournisseurIdentite"
+RUN dotnet build "fournisseurIdentite.csproj" -c Release -o /app/build
 
-# Restaurer les dépendances
-RUN dotnet restore
+FROM build AS publish
+RUN dotnet publish "fournisseurIdentite.csproj" -c Release -o /app/publish
 
-# Publier l'application
-RUN dotnet publish -c Release -o /app/out
-
-# Étape 2 : Utiliser l'image SDK pour inclure les outils de développement
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS runtime
+# Use the base image to run the app
+FROM base AS final
 WORKDIR /app
-
-# Copier tous les fichiers source (y compris .csproj) pour les outils comme dotnet ef
-COPY . .
-
-# Copier les fichiers publiés
-COPY --from=build /app/out ./out
-
-# Installer dotnet-ef
-RUN dotnet tool install --global dotnet-ef
-
-# Ajouter dotnet-ef au PATH
-ENV PATH="$PATH:/root/.dotnet/tools"
-
-# Définir le répertoire de travail pour le runtime
-WORKDIR /app/out
-
-# Exposer le port utilisé par l'application
-EXPOSE 5092
-
-# Commande pour démarrer l'application
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "fournisseurIdentite.dll"]
