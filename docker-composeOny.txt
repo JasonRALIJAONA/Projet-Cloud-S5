@@ -1,0 +1,41 @@
+services:
+  dotnet:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: dotnet_sdk
+    ports:
+      - "5000:5015" # Port pour l'application ASP.NET Core
+      - "5001:5001" # Port HTTPS si nécessaire
+    volumes:
+      - ./part1:/app # Monte le dossier app local dans le conteneur
+    working_dir: /app # Définit le répertoire de travail
+    stdin_open: true
+    tty: true # Permet de garder le conteneur interactif pour les commandes
+    depends_on:
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50' # Limite l'utilisation du CPU à 50%
+          memory: 512M # Limite l'utilisation de la mémoire à 512MB
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Etu002610
+      POSTGRES_DB: fournisseur_identite
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data:rw  # Persiste les données de la base de données PostgreSQL
+      - ./ressources:/docker-entrypoint-initdb.d # Monte le dossier ressources contenant le script SQL
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50' # Limite l'utilisation du CPU à 50%
+          memory: 512M # Limite l'utilisation de la mémoire à 512MB
+
+volumes:
+  pgdata:
