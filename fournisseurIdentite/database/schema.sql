@@ -1,5 +1,5 @@
 CREATE DATABASE fournisseur_identite;
-\c fournisseur_ide ntite
+\c fournisseur_identite
 
 CREATE TABLE utilisateur(
     id serial PRIMARY KEY, 
