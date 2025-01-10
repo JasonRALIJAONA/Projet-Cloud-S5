@@ -1,0 +1,5 @@
+# Created at 2025-01-10T08:46:45.102
+Boot Manifest-JAR contains absolute paths in classpath 'D:\JASON\programmes\Mixe\Projet Cloud S5\ProjetCloud\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

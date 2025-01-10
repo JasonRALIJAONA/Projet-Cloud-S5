@@ -73,3 +73,5 @@ Thumbs.db
 
 # Generated files
 *.generated.*
+
+ProjetCloud/src/main/resources/application.properties
