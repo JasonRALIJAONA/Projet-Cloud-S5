@@ -36,13 +36,13 @@ fournisseurIdentite\appsettings.json
 .fake
 
 
-# Maven
-# target/
-# pom.xml.tag
-# pom.xml.releaseBackup
-# pom.xml.versionsBackup
-# pom.xml.next
-# release.properties
+Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
 
 # IntelliJ IDEA
 .idea/
