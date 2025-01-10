@@ -1,8 +1,7 @@
-package main.java.ProjetCloud.Cloud.Models;
+package ProjetCloud.Cloud.Cryptomonnaie;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cryptomonnaie")

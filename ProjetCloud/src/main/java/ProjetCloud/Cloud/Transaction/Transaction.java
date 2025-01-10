@@ -1,4 +1,4 @@
-package ProjetCloud.Cloud.Portefeuille;
+package ProjetCloud.Cloud.Transaction;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
